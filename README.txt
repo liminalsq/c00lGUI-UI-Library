@@ -5,7 +5,7 @@ Created for lag-free experiences and simple use.
 
 -- Load the Library --
 
-local c00lGUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/liminalsq/c00lGUI-UI-Library/main/c00lGUI.lua"))()
+local c00lGUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/liminalsq/c00lGUI-UI-Library/refs/heads/main/c00lGUI.lua"))()
 
 -- Create the Main Window --
 
