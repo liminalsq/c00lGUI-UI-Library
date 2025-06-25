@@ -1,6 +1,6 @@
 --[[
 
-c00lLibrary v1
+c00lLibrary v1.2
 
 STILL A WIP AND IN BETA
 
@@ -171,8 +171,6 @@ function CoolGUI:AddSlider(parent, title, min, max, callback)
 
 	local UserInputService = game:GetService("UserInputService")
 	local dragging = false
-	local dragConnection
-	local releaseConnection
 
 	local function updateValueFromX(x)
 		local rel = math.clamp((x - sliderBar.AbsolutePosition.X) / sliderBar.AbsoluteSize.X, 0, 1)
@@ -182,30 +180,34 @@ function CoolGUI:AddSlider(parent, title, min, max, callback)
 		callback(value)
 	end
 
-	sliderBar.InputBegan:Connect(function(input)
-		if input.UserInputType == Enum.UserInputType.MouseButton1 then
+	local function startDrag(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 			dragging = true
 			updateValueFromX(input.Position.X)
 
 			local main = parent:FindFirstAncestor("Main")
 			if main then main.Draggable = false end
 
-			dragConnection = UserInputService.InputChanged:Connect(function(moveInput)
-				if moveInput.UserInputType == Enum.UserInputType.MouseMovement and dragging then
+			local moveConn, endConn
+
+			moveConn = UserInputService.InputChanged:Connect(function(moveInput)
+				if (moveInput.UserInputType == Enum.UserInputType.MouseMovement or moveInput.UserInputType == Enum.UserInputType.Touch) and dragging then
 					updateValueFromX(moveInput.Position.X)
 				end
 			end)
 
-			releaseConnection = UserInputService.InputEnded:Connect(function(releaseInput)
-				if releaseInput.UserInputType == Enum.UserInputType.MouseButton1 then
+			endConn = UserInputService.InputEnded:Connect(function(endInput)
+				if endInput.UserInputType == Enum.UserInputType.MouseButton1 or endInput.UserInputType == Enum.UserInputType.Touch then
 					dragging = false
-					if dragConnection then dragConnection:Disconnect() end
-					if releaseConnection then releaseConnection:Disconnect() end
+					moveConn:Disconnect()
+					endConn:Disconnect()
 					if main then main.Draggable = true end
 				end
 			end)
 		end
-	end)
+	end
+
+	sliderBar.InputBegan:Connect(startDrag)
 
 	return sliderBar
 end
