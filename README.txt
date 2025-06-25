@@ -14,7 +14,7 @@ main.ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
 -- Add Elements --
 
-c00lGUI:AddButton(main.Container, "Explode", function()
+c00lGUI:AddButton(main.Container, "Print in Console", function()
     print("Hello world")
 end)
 
