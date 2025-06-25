@@ -1,8 +1,7 @@
 c00lGUI - Roblox UI Library (BETA)
 ===============================
 
-😎 A stylish, lightweight Roblox GUI library inspired by the classic c00lkidd GUI aesthetic.
-Created for exploiters, devs, and scripters who want a fast, clean UI without all the bloat.
+Created for lag-free experiences and simple use.
 
 -- Load the Library --
 
