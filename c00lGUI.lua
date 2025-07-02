@@ -22,6 +22,7 @@ function CoolGUI:CreateWindow(title)
 		ResetOnSpawn = false,
 		ZIndexBehavior = Enum.ZIndexBehavior.Global,
 	})
+	screen.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui") --game:GetService("CoreGui") 
 
 	local frame = create("Frame", {
 		Size = UDim2.new(0, 350, 0, 300),
@@ -140,7 +141,7 @@ function CoolGUI:AddInput(parent, placeholder, callback)
 	return box
 end
 
-function CoolGUI:AddSlider(parent, title, min, max, callback)
+function CoolGUI:AddSlider(parent, title, currentVal, min, max, callback)
 	local frame = Instance.new("Frame")
 	frame.Size = UDim2.new(1, 0, 0, 50)
 	frame.BackgroundTransparency = 1
@@ -179,6 +180,10 @@ function CoolGUI:AddSlider(parent, title, min, max, callback)
 		label.Text = title .. ": " .. value
 		callback(value)
 	end
+	local rel = math.clamp((currentVal - min) / (max - min), 0, 1)
+	fill.Size = UDim2.new(rel, 0, 1, 0)
+	label.Text = title .. ": " .. currentVal
+	callback(currentVal)
 
 	local function startDrag(input)
 		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
@@ -212,11 +217,11 @@ function CoolGUI:AddSlider(parent, title, min, max, callback)
 	return sliderBar
 end
 
-function CoolGUI:AddToggle(parent, labelText, callback)
+function CoolGUI:AddToggle(parent, currentBool, labelText, callback)
 	local toggle = false
 	local button = create("TextButton", {
 		Size = UDim2.new(1, 0, 0, 35),
-		Text = labelText .. ": OFF",
+		Text = labelText .. ": " .. (currentBool and "ON" or "OFF"),
 		BackgroundColor3 = Color3.fromRGB(20, 20, 20),
 		BorderColor3 = Color3.fromRGB(255, 0, 0),
 		TextColor3 = Color3.fromRGB(255, 255, 255),
