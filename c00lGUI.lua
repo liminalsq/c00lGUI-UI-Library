@@ -226,7 +226,7 @@ function CoolGUI:AddSlider(parent, title, currentVal, min, max, increment, callb
 end
 
 function CoolGUI:AddToggle(parent, currentBool, labelText, callback)
-	local toggle = false
+	local toggle = currentBool
 	local button = create("TextButton", {
 		Size = UDim2.new(1, 0, 0, 35),
 		Text = labelText .. ": " .. (currentBool and "ON" or "OFF"),
