@@ -141,7 +141,7 @@ function CoolGUI:AddInput(parent, placeholder, callback)
 	return box
 end
 
-function CoolGUI:AddSlider(parent, title, currentVal, min, max, callback)
+function CoolGUI:AddSlider(parent, title, currentVal, min, max, increment, callback)
 	local frame = Instance.new("Frame")
 	frame.Size = UDim2.new(1, 0, 0, 50)
 	frame.BackgroundTransparency = 1
@@ -173,16 +173,24 @@ function CoolGUI:AddSlider(parent, title, currentVal, min, max, callback)
 	local UserInputService = game:GetService("UserInputService")
 	local dragging = false
 
+	local function quantize(val)
+		local steps = math.floor((val - min) / increment + 0.5)
+		return math.clamp(min + steps * increment, min, max)
+	end
+
 	local function updateValueFromX(x)
 		local rel = math.clamp((x - sliderBar.AbsolutePosition.X) / sliderBar.AbsoluteSize.X, 0, 1)
-		local value = math.floor(min + (max - min) * rel)
-		fill.Size = UDim2.new(rel, 0, 1, 0)
-		label.Text = title .. ": " .. value
+		local rawVal = min + (max - min) * rel
+		local value = quantize(rawVal)
+		local newRel = (value - min) / (max - min)
+		fill.Size = UDim2.new(newRel, 0, 1, 0)
+		label.Text = title .. ": " .. tostring(value)
 		callback(value)
 	end
-	local rel = math.clamp((currentVal - min) / (max - min), 0, 1)
+
+	local rel = (currentVal - min) / (max - min)
 	fill.Size = UDim2.new(rel, 0, 1, 0)
-	label.Text = title .. ": " .. currentVal
+	label.Text = title .. ": " .. tostring(currentVal)
 	callback(currentVal)
 
 	local function startDrag(input)
